@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2023-08-11 16:45:13
 */
 public interface UserAuthService extends IService<UserAuth> {
-
+    UserAuth getByEmail(String email);
 }

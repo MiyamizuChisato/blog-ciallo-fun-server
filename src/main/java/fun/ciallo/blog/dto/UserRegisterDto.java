@@ -1,4 +1,4 @@
-package fun.ciallo.blog.vo;
+package fun.ciallo.blog.dto;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @NotNull
-public class UserRegisterVo {
+public class UserRegisterDto {
     @Email
     @NotBlank
     private String email;

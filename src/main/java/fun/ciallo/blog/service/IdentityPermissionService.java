@@ -3,6 +3,8 @@ package fun.ciallo.blog.service;
 import fun.ciallo.blog.entity.IdentityPermission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author Miya
 * @description 针对表【identity_permission】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface IdentityPermissionService extends IService<IdentityPermission> {
 
+    List<Integer> getPermissionsByIdentities(List<Integer> identities);
 }

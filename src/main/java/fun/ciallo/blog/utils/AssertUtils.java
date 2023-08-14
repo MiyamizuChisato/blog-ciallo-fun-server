@@ -16,6 +16,18 @@ public final class AssertUtils {
         }
     }
 
+    public static void isNull(Object o, BlogServerException exception) {
+        if (o != null) {
+            throw exception;
+        }
+    }
+
+    public static void notNull(Object o, BlogServerException exception) {
+        if (o == null) {
+            throw exception;
+        }
+    }
+
     public static void isEquals(Object sono, Object kono, BlogServerException exception) {
         if (!sono.equals(kono)) {
             throw exception;
