@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+server:
+  port: 3030
+  servlet:
+    context-path: /blog
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/xml/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
