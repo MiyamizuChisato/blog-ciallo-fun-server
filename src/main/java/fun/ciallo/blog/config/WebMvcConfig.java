@@ -28,27 +28,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public HttpMessageConverter<String> responseBodyConverter() {
         return new StringHttpMessageConverter(StandardCharsets.UTF_8);
     }
+
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         JavaTimeModule module = new JavaTimeModule();
-        var dateTimeDeserializer = new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(pattern));
-        var dateTimeSerializer = new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(pattern));
+        LocalDateTimeDeserializer dateTimeDeserializer = new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(pattern));
+        LocalDateTimeSerializer dateTimeSerializer = new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(pattern));
         module.addDeserializer(LocalDateTime.class, dateTimeDeserializer);
         module.addSerializer(LocalDateTime.class, dateTimeSerializer);
-        var objectMapper = Jackson2ObjectMapperBuilder.json().modules(module)
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).build();
+        ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().modules(module).featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS).build();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.setDateFormat(new SimpleDateFormat(pattern));
         return objectMapper;
     }
 
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
-        var converter = new MappingJackson2HttpMessageConverter();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setDefaultCharset(StandardCharsets.UTF_8);
         converter.setObjectMapper(objectMapper);
         return converter;
     }
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(0, responseBodyConverter());
