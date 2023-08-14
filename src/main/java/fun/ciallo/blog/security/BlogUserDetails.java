@@ -1,5 +1,6 @@
 package fun.ciallo.blog.security;
 
+import fun.ciallo.blog.entity.PermissionProfile;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,11 +16,13 @@ public class BlogUserDetails implements UserDetails {
     private String username;
     private String password;
     private String identity;
-    private List<String> permissions;
+    private List<PermissionProfile> permissions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.permissions.stream().map(SimpleGrantedAuthority::new).toList();
+        return this.permissions.stream()
+                .map(permissionProfile -> new SimpleGrantedAuthority(permissionProfile.getPermissionName()))
+                .toList();
     }
 
     @Override

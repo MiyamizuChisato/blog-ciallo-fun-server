@@ -41,22 +41,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .cors()
+                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .cors()
-                .and()
                 .authorizeRequests()
-                .antMatchers("/blog/user/auth/**").permitAll()
+                .antMatchers("/user/auth/**").anonymous()
                 .anyRequest().authenticated()
-                .and()
-                .exceptionHandling()
-                //异常认证
-                .authenticationEntryPoint(new CustomizeAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomizeAccessDeniedHandler())
-                .and()
-                .addFilterBefore(new JwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(userDetailsService)
-                .build();
+                .and().build();
+//                .and()
+//                .exceptionHandling()
+//                //异常认证
+//                .authenticationEntryPoint(new CustomizeAuthenticationEntryPoint())
+//                .accessDeniedHandler(new CustomizeAccessDeniedHandler())
+//                .and()
+//                .addFilterBefore(new JwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .userDetailsService(userDetailsService)
+//                .build();
     }
 }

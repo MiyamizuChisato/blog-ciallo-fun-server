@@ -1,5 +1,7 @@
 package fun.ciallo.blog.service.impl;
 
+import fun.ciallo.blog.entity.IdentityProfile;
+import fun.ciallo.blog.entity.PermissionProfile;
 import fun.ciallo.blog.entity.UserAuth;
 import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.BlogUserDetails;
@@ -22,6 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserIdentityService userIdentityService;
     @Resource
     private IdentityPermissionService identityPermissionService;
+    @Resource
+    private PermissionProfileService PermissionProfileService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,7 +36,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserProfile userProfile = userProfileService.getById(userAuth.getUserProfileId());
         List<Integer> identities = userIdentityService.getIdentityIdsByUser(userProfile.getId());
         List<Integer> permissionIds = identityPermissionService.getPermissionsByIdentities(identities);
+        List<PermissionProfile> permissions = PermissionProfileService.listByIds(permissionIds);
         BlogUserDetails blogUserDetails = new BlogUserDetails();
+        blogUserDetails.setPermissions(permissions);
         blogUserDetails.setId(userProfile.getId());
         blogUserDetails.setStatus(userProfile.getStatus());
         blogUserDetails.setUsername(userAuth.getEmail());

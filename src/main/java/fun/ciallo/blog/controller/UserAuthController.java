@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
-
+@Valid
 @RestController
 @RequestMapping("/user/auth")
 public class UserAuthController {
@@ -25,7 +25,7 @@ public class UserAuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+    public String register(@RequestBody UserRegisterDto userRegisterDto) {
         return userRegisterDto.getEmail();
     }
 
