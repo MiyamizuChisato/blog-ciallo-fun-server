@@ -2,10 +2,21 @@ package fun.ciallo.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import fun.ciallo.blog.common.response.BlogServerException;
+import fun.ciallo.blog.common.response.ResultStatus;
+import fun.ciallo.blog.dto.UserLoginDto;
 import fun.ciallo.blog.entity.UserAuth;
+import fun.ciallo.blog.security.BlogUserDetails;
 import fun.ciallo.blog.service.UserAuthService;
 import fun.ciallo.blog.mapper.UserAuthMapper;
+import fun.ciallo.blog.utils.AssertUtils;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author Miya
