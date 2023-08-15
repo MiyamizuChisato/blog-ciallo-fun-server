@@ -1,5 +1,8 @@
 package fun.ciallo.blog.security;
 
+import cn.hutool.json.JSONUtil;
+import fun.ciallo.blog.common.response.Result;
+import fun.ciallo.blog.common.response.ResultStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -11,6 +14,7 @@ import java.io.IOException;
 public class CustomizeAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.getWriter().write("{message:error}");
+        Result<Object> result = new Result<>(ResultStatus.USER_AUTH_ERROR);
+        response.getWriter().write(JSONUtil.toJsonStr(result));
     }
 }

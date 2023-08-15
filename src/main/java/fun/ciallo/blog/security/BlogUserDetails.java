@@ -2,6 +2,7 @@ package fun.ciallo.blog.security;
 
 import fun.ciallo.blog.entity.PermissionProfile;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,19 +11,17 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class BlogUserDetails implements UserDetails {
     private Integer id;
-    private Integer status;
     private String username;
     private String password;
     private String identity;
-    private List<PermissionProfile> permissions;
+    private List<String> permissions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.permissions.stream()
-                .map(permissionProfile -> new SimpleGrantedAuthority(permissionProfile.getPermissionName()))
-                .toList();
+        return this.permissions.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
@@ -42,7 +41,7 @@ public class BlogUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return status > 0;
+        return true;
     }
 
     @Override

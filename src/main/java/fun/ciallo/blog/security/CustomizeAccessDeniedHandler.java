@@ -1,5 +1,8 @@
 package fun.ciallo.blog.security;
 
+import cn.hutool.json.JSONUtil;
+import fun.ciallo.blog.common.response.Result;
+import fun.ciallo.blog.common.response.ResultStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -11,6 +14,7 @@ import java.io.IOException;
 public class CustomizeAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        System.out.println(403);
+        Result<Object> result = new Result<>(ResultStatus.USER_PERMISSION_ERROR);
+        response.getWriter().write(JSONUtil.toJsonStr(result));
     }
 }

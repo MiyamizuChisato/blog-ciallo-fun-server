@@ -3,10 +3,6 @@ package fun.ciallo.blog.common.response;
 import java.time.LocalDateTime;
 
 public final class Result<T> {
-    private Result() {
-
-    }
-
     public Result(ResultStatus status) {
         this.code = status.getCode();
         this.message = status.getMessage();
@@ -26,7 +22,7 @@ public final class Result<T> {
         return data;
     }
 
-    public Result<T>  setData(T data) {
+    public Result<T> setData(T data) {
         this.data = data;
         return this;
     }
@@ -35,7 +31,7 @@ public final class Result<T> {
         return code;
     }
 
-    public Result<T>  setCode(Integer code) {
+    public Result<T> setCode(Integer code) {
         this.code = code;
         return this;
     }

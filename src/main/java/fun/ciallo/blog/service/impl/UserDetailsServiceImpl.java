@@ -8,6 +8,8 @@ import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.BlogUserDetails;
 import fun.ciallo.blog.service.*;
 import fun.ciallo.blog.utils.AssertUtils;
+import lombok.SneakyThrows;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,23 +25,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserProfileService userProfileService;
     @Resource
-    private UserIdentityService userIdentityService;
-    @Resource
-    private IdentityPermissionService identityPermissionService;
-    @Resource
     private PermissionProfileService permissionProfileService;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
+    @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAuth userAuth = userAuthService.getByEmail(username);
         AssertUtils.notNull(userAuth, new BlogServerException(ResultStatus.USER_AUTH_ERROR));
         UserProfile userProfile = userProfileService.getById(userAuth.getUserProfileId());
-        List<Integer> identities = userIdentityService.getIdentityIdsByUser(userProfile.getId());
-        List<Integer> permissionIds = identityPermissionService.getPermissionsByIdentities(identities);
-        List<PermissionProfile> permissions = permissionProfileService.listByIds(permissionIds);
+        List<String> permissions = permissionProfileService.listPermissionByUserId(userAuth.getUserProfileId());
         BlogUserDetails blogUserDetails = new BlogUserDetails();
         blogUserDetails.setId(userProfile.getId());
-        blogUserDetails.setStatus(userProfile.getStatus());
         blogUserDetails.setUsername(userAuth.getEmail());
         blogUserDetails.setPassword(userAuth.getPassword());
         blogUserDetails.setPermissions(permissions);
