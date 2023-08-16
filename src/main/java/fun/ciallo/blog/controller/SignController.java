@@ -54,7 +54,7 @@ public class SignController {
 
     @Open
     @PostMapping("/login/{type}")
-    public String login(AuthCallback callback, @PathVariable String type) {
+    public String login(@RequestBody AuthCallback callback, @PathVariable String type) {
         AuthRequest authRequest = authRequestFactory.get(type);
         AuthResponse<AuthUser> authResponse = authRequest.login(callback);
         AuthUser authUser = authResponse.getData();
