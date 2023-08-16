@@ -2,14 +2,12 @@ package fun.ciallo.blog.service.impl;
 
 import fun.ciallo.blog.common.response.BlogServerException;
 import fun.ciallo.blog.common.response.ResultStatus;
-import fun.ciallo.blog.entity.PermissionProfile;
 import fun.ciallo.blog.entity.UserAuth;
 import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.BlogUserDetails;
 import fun.ciallo.blog.service.*;
 import fun.ciallo.blog.utils.AssertUtils;
 import lombok.SneakyThrows;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,8 +24,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserProfileService userProfileService;
     @Resource
     private PermissionProfileService permissionProfileService;
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
 
     @SneakyThrows
     @Override

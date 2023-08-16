@@ -7,3 +7,16 @@ spring:
   redis:
     password: ao1sakura
     host: ciallo.fun
+justauth:
+  enabled: true
+  cache:
+    type: redis
+  type:
+    GITHUB:
+      client-id: d389c24ba56ec9c98e67
+      client-secret: 789dcf408a9835e0ba6a48deacba5e5328309c4e
+      redirect-uri: http://localhost/oauth/github
+    GITEE:
+      client-id: 6efae9ec6b89c89300cb8321cf7e955315f3a010063bcfa0a9503fb7fcc17728
+      client-secret: 70483353d53fca7b76c455415893d1896950f14fb0aeb8da5318fcfa23af32ea
+      redirect-uri: http://localhost/oauth/gitee

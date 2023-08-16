@@ -1,11 +1,13 @@
 package fun.ciallo.blog.common.response;
 
 public enum ResultStatus {
-    SUCCESS(200, "Response Successful!"),
-    FAILED(-100, "Response Failed!"),
-    USER_AUTH_ERROR(-101, "User Authentication Error!"),
-    USER_REPEAT(-102, "User Email Already Exists!"),
-    USER_PERMISSION_ERROR(-103, "User Permission Error!");
+    SUCCESS(200, "响应成功"),
+    FAILED(-100, "响应失败"),
+    USER_AUTH_ERROR(-101, "认证错误"),
+    USER_REPEAT(-102, "邮箱已注册"),
+    USER_PERMISSION_ERROR(-103, "无权访问"),
+    USER_CODE_ERROR(-104, "验证错误"),
+    USER_OAUTH_TIMEOUT(-105, "认证超时");
 
     ResultStatus(Integer code, String message) {
         this.code = code;

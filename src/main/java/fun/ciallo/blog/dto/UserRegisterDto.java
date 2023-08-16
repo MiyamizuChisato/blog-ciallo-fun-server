@@ -17,6 +17,8 @@ public class UserRegisterDto {
     private String password;
     @NotBlank
     private String nickname;
+    @NotBlank
+    private String code;
     private String site;
     private String avatar;
 }

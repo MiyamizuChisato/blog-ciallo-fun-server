@@ -2,9 +2,13 @@ package fun.ciallo.blog.service;
 
 import fun.ciallo.blog.dto.UserLoginDto;
 import fun.ciallo.blog.dto.UserRegisterDto;
+import fun.ciallo.blog.entity.UserOauth;
+import fun.ciallo.blog.entity.UserProfile;
 
 public interface SignService {
     String login(UserLoginDto userLoginDto);
 
     String register(UserRegisterDto userRegisterDto);
+
+    String register(UserProfile userProfile, UserOauth userOauth);
 }

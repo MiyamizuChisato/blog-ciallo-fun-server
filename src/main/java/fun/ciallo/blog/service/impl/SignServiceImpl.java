@@ -7,12 +7,10 @@ import fun.ciallo.blog.dto.UserLoginDto;
 import fun.ciallo.blog.dto.UserRegisterDto;
 import fun.ciallo.blog.entity.UserAuth;
 import fun.ciallo.blog.entity.UserIdentity;
+import fun.ciallo.blog.entity.UserOauth;
 import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.BlogUserDetails;
-import fun.ciallo.blog.service.SignService;
-import fun.ciallo.blog.service.UserAuthService;
-import fun.ciallo.blog.service.UserIdentityService;
-import fun.ciallo.blog.service.UserProfileService;
+import fun.ciallo.blog.service.*;
 import fun.ciallo.blog.utils.AssertUtils;
 import fun.ciallo.blog.utils.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +34,8 @@ public class SignServiceImpl implements SignService {
     private PasswordEncoder passwordEncoder;
     @Resource
     private UserIdentityService userIdentityService;
+    @Resource
+    private UserOauthService userOauthService;
 
     @Override
     public String login(UserLoginDto userLoginDto) {
@@ -63,6 +63,17 @@ public class SignServiceImpl implements SignService {
         userAuth.setEmail(userRegisterDto.getEmail());
         userAuth.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
         userAuthService.save(userAuth);
+        UserIdentity userIdentity = new UserIdentity();
+        userIdentity.setUserId(userProfile.getId());
+        userIdentityService.save(userIdentity);
+        return JwtUtils.createToken(userProfile.getId());
+    }
+
+    @Override
+    public String register(UserProfile userProfile, UserOauth userOauth) {
+        userProfileService.save(userProfile);
+        userOauth.setUserProfileId(userProfile.getId());
+        userOauthService.save(userOauth);
         UserIdentity userIdentity = new UserIdentity();
         userIdentity.setUserId(userProfile.getId());
         userIdentityService.save(userIdentity);
