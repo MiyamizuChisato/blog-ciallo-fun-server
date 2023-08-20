@@ -15,6 +15,7 @@ public class CustomizeAuthenticationEntryPoint implements AuthenticationEntryPoi
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Result<Object> result = new Result<>(ResultStatus.USER_AUTH_ERROR);
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(JSONUtil.toJsonStr(result));
     }
 }

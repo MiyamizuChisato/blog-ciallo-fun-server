@@ -4,78 +4,32 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-/**
- * 
- * @TableName user_profile
- */
-@TableName(value ="user_profile")
 @Data
+@TableName(value = "user_profile")
 public class UserProfile implements Serializable {
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
-
-    /**
-     * 
-     */
-    private String nickname;
-
-    /**
-     * 
-     */
-    private String site;
-
-    /**
-     * 
-     */
-    private String motto;
-
-    /**
-     * 
-     */
-    private String avatar;
-
-    /**
-     * 
-     */
-    private Integer gender;
-
-    /**
-     * 
-     */
-    private String location;
-
-    /**
-     * 
-     */
-    private Date birthday;
-
-    /**
-     * 
-     */
-    private Integer status;
-
-    /**
-     * 
-     */
-    private Date createTime;
-
-    /**
-     * 
-     */
-    private Date updateTime;
-
-    /**
-     * 
-     */
-    private Integer isDeleted;
-
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+    private String nickname;
+    private String site;
+    private String motto;
+    private String avatar;
+    private Integer gender;
+    private String location;
+    private LocalDate birthday;
+    private Integer status;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private Integer isDeleted;
 }

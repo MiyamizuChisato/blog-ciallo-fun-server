@@ -1,12 +1,8 @@
 package fun.ciallo.blog.utils;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.signers.JWTSignerUtil;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,15 +17,14 @@ public class JwtUtils {
     }
 
     public static boolean verify(String token) {
-        byte[] key = SECRET.getBytes();
         try {
-            return JWT.of(token).setKey(key).verify();
+            return JWTUtil.verify(token, SECRET.getBytes());
         } catch (Exception e) {
             return false;
         }
     }
 
-    public static Integer getUserIdByToken(String token) {
-        return (Integer) JWTUtil.parseToken(token).getPayload("userId");
+    public static int getUserIdByToken(String token) {
+        return Integer.parseInt(JWTUtil.parseToken(token).getPayload("userId").toString());
     }
 }

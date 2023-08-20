@@ -1,7 +1,10 @@
 package fun.ciallo.blog.common.response;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public final class Result<T> {
     public Result(ResultStatus status) {
         this.code = status.getCode();
@@ -18,17 +21,9 @@ public final class Result<T> {
     private String message;
     private final LocalDateTime timestamp = LocalDateTime.now();
 
-    public T getData() {
-        return data;
-    }
-
     public Result<T> setData(T data) {
         this.data = data;
         return this;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
     public Result<T> setCode(Integer code) {
@@ -36,16 +31,9 @@ public final class Result<T> {
         return this;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public Result<T> setMessage(String message) {
         this.message = message;
         return this;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
 }

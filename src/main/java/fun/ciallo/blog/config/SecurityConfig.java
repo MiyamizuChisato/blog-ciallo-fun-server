@@ -8,6 +8,7 @@ import fun.ciallo.blog.service.PermissionProfileService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,9 +46,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer WebSecurityCustomizer() {
-        return web -> web.ignoring()
-                .antMatchers(openList().toArray(new String[0]));
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        Map<Set<String>, HttpMethod> urlList = getIgnoreAuthUrlList();
+        return web -> urlList.forEach((key, value) -> web.ignoring().antMatchers(value, key.toArray(new String[0])));
     }
 
     @Bean
@@ -63,9 +64,6 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomizeAuthenticationEntryPoint())
                 .accessDeniedHandler(new CustomizeAccessDeniedHandler())
@@ -76,17 +74,17 @@ public class SecurityConfig {
                 .build();
     }
 
-    private Set<String> openList() {
+    private Map<Set<String>, HttpMethod> getIgnoreAuthUrlList() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
-        Set<String> openUrls = new HashSet<>();
+        Map<Set<String>, HttpMethod> urls = new HashMap<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethods.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
             Open open = handlerMethod.getMethodAnnotation(Open.class);
             if (open != null) {
                 assert infoEntry.getKey().getPatternsCondition() != null;
-                openUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+                urls.put(infoEntry.getKey().getPatternsCondition().getPatterns(), open.value());
             }
         }
-        return openUrls;
+        return urls;
     }
 }

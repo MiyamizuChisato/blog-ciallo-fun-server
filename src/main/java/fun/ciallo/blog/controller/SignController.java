@@ -19,6 +19,7 @@ import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,14 +31,13 @@ import javax.validation.Valid;
 public class SignController {
     @Resource
     private AuthRequestFactory authRequestFactory;
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
+
     @Resource
     private UserOauthService userOauthService;
     @Resource
     private SignService signService;
 
-    @Open
+    @Open(HttpMethod.POST)
     @PostMapping("/register")
     public String register(@RequestBody UserRegisterDto userRegisterDto) {
 //        String code = stringRedisTemplate.opsForValue().get("register:" + userRegisterDto.getEmail());
@@ -46,13 +46,13 @@ public class SignController {
         return signService.register(userRegisterDto);
     }
 
-    @Open
+    @Open(HttpMethod.POST)
     @PostMapping("/login")
     public String login(@RequestBody UserLoginDto userLoginDto) {
         return signService.login(userLoginDto);
     }
 
-    @Open
+    @Open(HttpMethod.POST)
     @PostMapping("/login/{type}")
     public String login(@RequestBody AuthCallback callback, @PathVariable String type) {
         AuthRequest authRequest = authRequestFactory.get(type);
@@ -68,7 +68,7 @@ public class SignController {
         return JwtUtils.createToken(userOauth.getUserProfileId());
     }
 
-    @Open
+    @Open(HttpMethod.GET)
     @GetMapping("/path/{type}")
     public String getOauthPath(@PathVariable String type) {
         AuthRequest authRequest = authRequestFactory.get(type);
