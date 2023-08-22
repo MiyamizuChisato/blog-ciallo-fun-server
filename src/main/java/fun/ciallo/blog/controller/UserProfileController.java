@@ -1,6 +1,9 @@
 package fun.ciallo.blog.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.xuyanwu.spring.file.storage.FileInfo;
+import cn.xuyanwu.spring.file.storage.FileStorageService;
+import fun.ciallo.blog.dto.UserProfileUpdateDto;
 import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.Open;
 import fun.ciallo.blog.service.UserIdentityService;
@@ -9,6 +12,7 @@ import fun.ciallo.blog.vo.UserProfileVo;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,6 +24,8 @@ public class UserProfileController {
     private UserProfileService userProfileService;
     @Resource
     private UserIdentityService userIdentityService;
+    @Resource
+    private FileStorageService fileStorageService;
 
     @Open(HttpMethod.GET)
     @GetMapping("/{id}")
@@ -33,7 +39,20 @@ public class UserProfileController {
 
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('archive:get')")
-    public void update(@RequestBody UserProfile userProfile) {
+    public void update(UserProfileUpdateDto userProfileUpdateDto) {
+        MultipartFile avatarFile = userProfileUpdateDto.getAvatarFile();
+        UserProfile userProfile = BeanUtil.copyProperties(userProfileUpdateDto, UserProfile.class);
+        UserProfile beforeProfile = userProfileService.getById(userProfile.getId());
+        if (avatarFile != null) {
+            if (!beforeProfile.getAvatar().equals("https://cos.blog.ciallo.fun/blog/avatar/avatar.jpg")) {
+                fileStorageService.delete(beforeProfile.getAvatar());
+            }
+            FileInfo avatarInfo = fileStorageService.of(avatarFile)
+                    .setPath("avatar/")
+                    .setObjectType("avatar")
+                    .upload();
+            userProfile.setAvatar(avatarInfo.getUrl());
+        }
         userProfileService.updateById(userProfile);
     }
 }

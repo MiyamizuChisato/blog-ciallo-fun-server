@@ -2,6 +2,7 @@ package fun.ciallo.blog.dto;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -20,5 +21,6 @@ public class UserRegisterDto {
     @NotBlank
     private String code;
     private String site;
+    private MultipartFile avatarFile;
     private String avatar;
 }

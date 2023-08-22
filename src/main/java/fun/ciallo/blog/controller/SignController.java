@@ -1,5 +1,7 @@
 package fun.ciallo.blog.controller;
 
+import cn.xuyanwu.spring.file.storage.FileInfo;
+import cn.xuyanwu.spring.file.storage.FileStorageService;
 import com.xkcoding.justauth.AuthRequestFactory;
 import fun.ciallo.blog.common.response.BlogServerException;
 import fun.ciallo.blog.common.response.ResultStatus;
@@ -10,7 +12,6 @@ import fun.ciallo.blog.entity.UserProfile;
 import fun.ciallo.blog.security.Open;
 import fun.ciallo.blog.service.SignService;
 import fun.ciallo.blog.service.UserOauthService;
-import fun.ciallo.blog.service.UserProfileService;
 import fun.ciallo.blog.utils.AssertUtils;
 import fun.ciallo.blog.utils.JwtUtils;
 import me.zhyd.oauth.model.AuthCallback;
@@ -21,6 +22,7 @@ import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -31,18 +33,30 @@ import javax.validation.Valid;
 public class SignController {
     @Resource
     private AuthRequestFactory authRequestFactory;
-
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     @Resource
     private UserOauthService userOauthService;
     @Resource
     private SignService signService;
+    @Resource
+    private FileStorageService fileStorageService;
 
     @Open(HttpMethod.POST)
     @PostMapping("/register")
-    public String register(@RequestBody UserRegisterDto userRegisterDto) {
-//        String code = stringRedisTemplate.opsForValue().get("register:" + userRegisterDto.getEmail());
-//        AssertUtils.notNull(code, new BlogServerException(ResultStatus.USER_CODE_ERROR));
-//        AssertUtils.isEquals(code, userRegisterDto.getCode(), new BlogServerException(ResultStatus.USER_CODE_ERROR));
+    public String register(UserRegisterDto userRegisterDto) {
+        String code = stringRedisTemplate.opsForValue().get("register:" + userRegisterDto.getEmail());
+        AssertUtils.notNull(code, new BlogServerException(ResultStatus.USER_CODE_ERROR));
+        AssertUtils.isEquals(code, userRegisterDto.getCode(), new BlogServerException(ResultStatus.USER_CODE_ERROR));
+        MultipartFile avatarFile = userRegisterDto.getAvatarFile();
+        if (avatarFile != null) {
+            FileInfo avatarInfo = fileStorageService.of(avatarFile)
+                    .setPath("avatar/")
+                    .setObjectType("avatar")
+                    .upload();
+            userRegisterDto.setAvatar(avatarInfo.getUrl());
+        }
+        stringRedisTemplate.delete("register:" + userRegisterDto.getEmail());
         return signService.register(userRegisterDto);
     }
 

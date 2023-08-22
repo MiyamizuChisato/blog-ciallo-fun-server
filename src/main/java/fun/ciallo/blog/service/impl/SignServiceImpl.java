@@ -50,9 +50,6 @@ public class SignServiceImpl implements SignService {
     @Override
     @Transactional
     public String register(UserRegisterDto userRegisterDto) {
-        LambdaQueryWrapper<UserAuth> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(UserAuth::getEmail, userRegisterDto.getEmail());
-        AssertUtils.notTrue(userAuthService.exists(lambdaQueryWrapper), new BlogServerException(ResultStatus.USER_REPEAT));
         UserProfile userProfile = new UserProfile();
         userProfile.setNickname(userRegisterDto.getNickname());
         userProfile.setAvatar(userRegisterDto.getAvatar());

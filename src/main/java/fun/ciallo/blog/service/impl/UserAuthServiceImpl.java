@@ -33,6 +33,13 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth>
         lambdaQueryWrapper.eq(UserAuth::getEmail, email);
         return this.baseMapper.selectOne(lambdaQueryWrapper);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        LambdaQueryWrapper<UserAuth> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(UserAuth::getEmail, email);
+        return this.baseMapper.exists(lambdaQueryWrapper);
+    }
 }
 
 

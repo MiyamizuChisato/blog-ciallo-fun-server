@@ -3,6 +3,21 @@ spring:
     active: dev
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
+  file-storage:
+    default-platform: cos-blog-ciallo-fun
+    tencent-cos:
+      - platform: cos-blog-ciallo-fun
+        enable-storage: true
+        secret-id: AKIDjz62mQuCG8qRs8C6nFzYx96tZ4QekkXJ
+        secret-key: IOGOTdcOwIRLB0jIcopdEhBYjhWGn9JJ
+        region: ap-shanghai
+        bucket-name: fun-ciallo-blog-1302869254
+        domain: https://cos.blog.ciallo.fun/
+        base-path: blog/
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 server:
   port: 3030
   servlet:

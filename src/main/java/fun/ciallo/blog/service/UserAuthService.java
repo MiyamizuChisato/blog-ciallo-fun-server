@@ -12,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserAuthService extends IService<UserAuth> {
     UserAuth getByEmail(String email);
 
+    boolean existsByEmail(String email);
 }
