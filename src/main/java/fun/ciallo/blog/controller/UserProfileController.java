@@ -58,11 +58,7 @@ public class UserProfileController {
     public void update(UserProfileUpdateDto userProfileUpdateDto) {
         MultipartFile avatarFile = userProfileUpdateDto.getAvatarFile();
         UserProfile userProfile = BeanUtil.copyProperties(userProfileUpdateDto, UserProfile.class);
-        UserProfile beforeProfile = userProfileService.getById(userProfile.getId());
         if (avatarFile != null) {
-            if (!beforeProfile.getAvatar().equals("https://cos.blog.ciallo.fun/blog/avatar/avatar.jpg")) {
-                fileStorageService.delete(beforeProfile.getAvatar());
-            }
             FileInfo avatarInfo = fileStorageService.of(avatarFile)
                     .setPath("avatar/")
                     .setObjectType("avatar")
