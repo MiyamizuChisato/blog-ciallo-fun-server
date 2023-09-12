@@ -7,29 +7,6 @@ spring:
   redis:
     host: localhost
     password: ao1sakura
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-  mail:
-    host: smtp.163.com
-    default-encoding: UTF-8
-    protocol: smtp
-    username: miyamizuchisato@163.com
-    password: KXKBXFYQJZDSDVBM
-    properties:
-      mail:
-        transport:
-          protocol: smtp
-        smtp:
-          socketFactory:
-            class: javax.net.ssl.SSLSocketFactory
-          port: ${spring.mail.port}
-          auth: true
-          starttls:
-            enable: true
-            required: true
 justauth:
   enabled: true
   cache:
