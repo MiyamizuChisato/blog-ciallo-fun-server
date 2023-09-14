@@ -13,7 +13,8 @@ public enum Status {
     USER_REPEAT(-102, "邮箱已注册"),
     USER_PERMISSION_ERROR(-103, "无权访问"),
     USER_CODE_ERROR(-104, "验证错误"),
-    USER_OAUTH_TIMEOUT(-105, "认证超时");
+    USER_OAUTH_TIMEOUT(-105, "认证超时"),
+    CATEGORY_USED(-201, "分类已被使用");
 
     Status(Integer code, String message) {
         this.code = code;
@@ -38,4 +39,4 @@ public enum Status {
     public void setMessage(String message) {
         this.message = message;
     }
-}
+    }

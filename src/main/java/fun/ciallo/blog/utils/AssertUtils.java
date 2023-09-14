@@ -4,40 +4,44 @@ package fun.ciallo.blog.utils;
 import fun.ciallo.blog.common.ServerException;
 import fun.ciallo.blog.common.Status;
 
-public final class AssertUtils {
-    public static void isTrue(boolean expression, ServerException exception) {
+public class AssertUtils {
+    private static void exception(Status status) {
+        throw new ServerException(status);
+    }
+
+    public static void isTrue(boolean expression, Status status) {
         if (!expression) {
-            throw exception;
+            exception(status);
         }
     }
 
-    public static void notTrue(boolean expression, ServerException exception) {
+    public static void notTrue(boolean expression, Status status) {
         if (expression) {
-            throw exception;
+            exception(status);
         }
     }
 
-    public static void isNull(Object o, ServerException exception) {
+    public static void isNull(Object o, Status status) {
         if (o != null) {
-            throw exception;
+            exception(status);
         }
     }
 
     public static void notNull(Object o, Status status) {
         if (o == null) {
-            throw new ServerException(status);
+            exception(status);
         }
     }
 
     public static void isEquals(Object sono, Object kono, Status status) {
         if (!sono.equals(kono)) {
-            throw new ServerException(status);
+            exception(status);
         }
     }
 
-    public static void notEquals(Object sono, Object kono, ServerException exception) {
+    public static void notEquals(Object sono, Object kono, Status status) {
         if (sono.equals(kono)) {
-            throw exception;
+            exception(status);
         }
     }
 }

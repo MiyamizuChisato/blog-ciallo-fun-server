@@ -4,11 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.xuyanwu.spring.file.storage.FileInfo;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import fun.ciallo.blog.common.RedisConstants;
 import fun.ciallo.blog.common.Status;
 import fun.ciallo.blog.common.Token;
 import fun.ciallo.blog.common.UserHolder;
 import fun.ciallo.blog.core.user.dto.UserDto;
+import fun.ciallo.blog.core.user.dto.UserQueryDto;
 import fun.ciallo.blog.core.user.dto.UserUpdateDto;
 import fun.ciallo.blog.core.user.entity.User;
 import fun.ciallo.blog.core.user.service.UserService;
@@ -38,6 +40,20 @@ public class UserController {
         return userDto;
     }
 
+    @Token(admin = true)
+    @GetMapping("/page/{current}")
+    public Page<UserDto> getUserByPage(@PathVariable long current, @RequestBody UserQueryDto userQueryDto) {
+        Page<User> parmaPage = new Page<>(current, 5L);
+        Page<UserDto> page;
+        if (userQueryDto.isQuery()) {
+            page = userService.queryUserDtoByPage(parmaPage, userQueryDto);
+        } else {
+            page = userService.loadUserDtoByPage(parmaPage);
+        }
+        AssertUtils.notNull(page, Status.NOT_FOUND);
+        return page;
+    }
+
     @Token
     @PutMapping("/update")
     public void update(UserUpdateDto userDto) {
@@ -53,6 +69,7 @@ public class UserController {
             user.setAvatar(avatarInfo.getUrl());
         }
         userService.updateById(user);
+        cacheUtils.batchDelete(RedisConstants.USER_PAGE);
         cacheUtils.delete(RedisConstants.USER + user.getId());
     }
 }

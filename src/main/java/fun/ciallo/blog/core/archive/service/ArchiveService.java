@@ -1,6 +1,5 @@
 package fun.ciallo.blog.core.archive.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import fun.ciallo.blog.core.archive.dto.ArchiveDto;
@@ -17,4 +16,6 @@ public interface ArchiveService extends IService<Archive> {
     Page<ArchiveDto> getArchiveDtoByPage(Page<Archive> parmaPage);
 
     Page<ArchiveDto> queryArchiveDtoByPage(Page<Archive> parmaPage, ArchiveQueryDto archiveQueryDto);
+
+    boolean existsByCategory(int id);
 }

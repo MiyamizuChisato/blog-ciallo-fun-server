@@ -72,6 +72,13 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
         return buildArchiveDtoPage(parmaPage);
     }
 
+    @Override
+    public boolean existsByCategory(int id) {
+        LambdaQueryWrapper<Archive> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Archive::getCategory, id);
+        return this.exists(lambdaQueryWrapper);
+    }
+
     private Page<ArchiveDto> buildArchiveDtoPage(Page<Archive> parmaPage) {
         if (parmaPage.getRecords().isEmpty()) {
             return null;

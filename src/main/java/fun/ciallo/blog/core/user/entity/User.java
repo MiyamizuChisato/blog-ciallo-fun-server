@@ -18,7 +18,8 @@ public class User extends BaseEntity {
     private String nickname;
     private String avatar;
     private String motto;
-    private String gender;
+    private Integer gender;
+    private String location;
     private LocalDate birthday;
     private String site;
     private Boolean privileges;

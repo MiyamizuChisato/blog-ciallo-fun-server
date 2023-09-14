@@ -9,8 +9,11 @@ public final class RedisConstants {
     public static final Duration TTL_LONGEST = Duration.ofHours(24L);
     public static final String BLANK = "";
     public static final String USER = "user:";
+    public static final String USER_PAGE = "user:page:";
     public static final String ARCHIVE = "archive:";
     public static final String ARCHIVE_PAGE = "archive:page:";
     public static final String CATEGORIES = "categories";
     public static final String CATEGORY_MAP = "category:map";
+    public static final String MESSAGE_PAGE = "message:page:";
+
 }

@@ -1,7 +1,7 @@
 package fun.ciallo.blog.core.archive.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import fun.ciallo.blog.common.RedisConstants;
 import fun.ciallo.blog.common.Status;
@@ -10,6 +10,7 @@ import fun.ciallo.blog.common.UserHolder;
 import fun.ciallo.blog.core.archive.dto.ArchiveDto;
 import fun.ciallo.blog.core.archive.dto.ArchiveQueryDto;
 import fun.ciallo.blog.core.archive.dto.ArchiveSaveDto;
+import fun.ciallo.blog.core.archive.dto.ArchiveUpdateDto;
 import fun.ciallo.blog.core.archive.entity.Archive;
 import fun.ciallo.blog.core.archive.service.ArchiveService;
 import fun.ciallo.blog.core.user.dto.UserDto;
@@ -38,24 +39,21 @@ public class ArchiveController {
     }
 
     @GetMapping("/page/{current}")
-    public IPage<ArchiveDto> getArchiveByPage(@PathVariable long current) {
+    public Page<ArchiveDto> getArchiveByPage(@PathVariable long current, @RequestBody ArchiveQueryDto archiveQueryDto) {
         Page<Archive> parmaPage = new Page<>(current, 5L);
-        IPage<ArchiveDto> page = archiveService.loadArchiveDtoByPage(parmaPage);
-        AssertUtils.notNull(page, Status.NOT_FOUND);
-        return page;
-    }
-
-    @GetMapping("/query/{current}")
-    public IPage<ArchiveDto> queryArchiveByPage(@PathVariable long current, @RequestBody ArchiveQueryDto archiveQueryDto) {
-        Page<Archive> parmaPage = new Page<>(current, 5L);
-        IPage<ArchiveDto> page = archiveService.queryArchiveDtoByPage(parmaPage, archiveQueryDto);
+        Page<ArchiveDto> page;
+        if (archiveQueryDto.isQuery()) {
+            page = archiveService.queryArchiveDtoByPage(parmaPage, archiveQueryDto);
+        } else {
+            page = archiveService.loadArchiveDtoByPage(parmaPage);
+        }
         AssertUtils.notNull(page, Status.NOT_FOUND);
         return page;
     }
 
     @Token(admin = true)
     @PostMapping("/save")
-    public void saveArchive(ArchiveSaveDto archiveSaveDto) {
+    public void save(ArchiveSaveDto archiveSaveDto) {
         UserDto userDto = UserHolder.get();
         archiveSaveDto.setCreateUser(userDto.getId());
         Archive archive = new Archive();
@@ -66,5 +64,27 @@ public class ArchiveController {
         archive.setContent(content);
         archiveService.save(archive);
         cacheUtils.batchDelete(RedisConstants.ARCHIVE_PAGE);
+    }
+
+    @Token(admin = true)
+    @PutMapping("/update")
+    public void update(ArchiveUpdateDto archiveUpdateDto) {
+        UserDto userDto = UserHolder.get();
+        Archive archive = archiveService.getById(archiveUpdateDto.getId());
+        AssertUtils.isEquals(userDto.getId(), archive.getCreateUser(), Status.ILLEGAL);
+        BeanUtil.copyProperties(archiveUpdateDto, archive);
+        if (archiveUpdateDto.getImage() != null) {
+            fileStorageService.delete(archive.getImage());
+            String image = fileStorageService.of(archiveUpdateDto.getImage()).setPath("image/").setObjectType("image").upload().getUrl();
+            archive.setImage(image);
+        }
+        if (archiveUpdateDto.getContent() != null) {
+            fileStorageService.delete(archive.getContent());
+            String content = fileStorageService.of(archiveUpdateDto.getContent()).setPath("markdown/").setObjectType("md").upload().getUrl();
+            archive.setContent(content);
+        }
+        archiveService.updateById(archive);
+        cacheUtils.batchDelete(RedisConstants.ARCHIVE_PAGE);
+        cacheUtils.delete(RedisConstants.ARCHIVE + archive.getId());
     }
 }
