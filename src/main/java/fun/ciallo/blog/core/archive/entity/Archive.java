@@ -18,7 +18,7 @@ public class Archive extends BaseEntity {
     private Integer category;
     private String description;
     private String content;
-    private String watchCount;
-    private String likeCount;
+    private Integer watchCount;
+    private Integer likeCount;
     private Integer createUser;
 }

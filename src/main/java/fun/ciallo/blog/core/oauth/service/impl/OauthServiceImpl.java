@@ -7,6 +7,7 @@ import fun.ciallo.blog.core.oauth.service.OauthService;
 import fun.ciallo.blog.core.user.entity.User;
 import fun.ciallo.blog.core.user.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -16,6 +17,7 @@ public class OauthServiceImpl extends ServiceImpl<OauthMapper, Oauth> implements
     private UserService userService;
 
     @Override
+    @Transactional
     public void sign(Oauth oauth, User user) {
         userService.save(user);
         oauth.setId(user.getId());

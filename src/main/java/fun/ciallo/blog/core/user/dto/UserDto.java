@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class UserDto {
@@ -17,4 +18,5 @@ public class UserDto {
     private Boolean privileges;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+    private LocalDateTime createTime;
 }

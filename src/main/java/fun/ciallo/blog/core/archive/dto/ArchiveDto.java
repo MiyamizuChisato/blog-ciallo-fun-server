@@ -4,6 +4,8 @@ import fun.ciallo.blog.core.category.dto.CategoryDto;
 import fun.ciallo.blog.core.user.dto.UserArchiveDto;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ArchiveDto {
     private Integer id;
@@ -11,8 +13,10 @@ public class ArchiveDto {
     private String image;
     private String description;
     private String content;
-    private String watchCount;
-    private String likeCount;
+    private Integer watchCount;
+    private Integer likeCount;
     private UserArchiveDto createUser;
     private CategoryDto category;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 }

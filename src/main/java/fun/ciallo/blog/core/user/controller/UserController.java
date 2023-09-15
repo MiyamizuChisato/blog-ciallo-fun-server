@@ -1,7 +1,6 @@
 package fun.ciallo.blog.core.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.xuyanwu.spring.file.storage.FileInfo;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -62,9 +61,7 @@ public class UserController {
         MultipartFile avatarFile = userDto.getAvatarFile();
         User user = BeanUtil.copyProperties(userDto, User.class);
         if (avatarFile != null) {
-            if (StrUtil.isNotBlank(user.getAvatar())) {
-                fileStorageService.delete(user.getAvatar());
-            }
+            fileStorageService.delete(user.getAvatar());
             FileInfo avatarInfo = fileStorageService.of(avatarFile).setPath("avatar/").setObjectType("image").upload();
             user.setAvatar(avatarInfo.getUrl());
         }

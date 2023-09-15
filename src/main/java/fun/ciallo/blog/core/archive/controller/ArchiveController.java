@@ -38,7 +38,7 @@ public class ArchiveController {
         return archiveDto;
     }
 
-    @GetMapping("/page/{current}")
+    @PostMapping("/page/{current}")
     public Page<ArchiveDto> getArchiveByPage(@PathVariable long current, @RequestBody ArchiveQueryDto archiveQueryDto) {
         Page<Archive> parmaPage = new Page<>(current, 5L);
         Page<ArchiveDto> page;
@@ -55,9 +55,9 @@ public class ArchiveController {
     @PostMapping("/save")
     public void save(ArchiveSaveDto archiveSaveDto) {
         UserDto userDto = UserHolder.get();
-        archiveSaveDto.setCreateUser(userDto.getId());
         Archive archive = new Archive();
         BeanUtils.copyProperties(archiveSaveDto, archive);
+        archive.setCreateUser(userDto.getId());
         String content = fileStorageService.of(archiveSaveDto.getContent()).setPath("markdown/").setObjectType("md").upload().getUrl();
         String image = fileStorageService.of(archiveSaveDto.getImage()).setPath("image/").setObjectType("image").upload().getUrl();
         archive.setImage(image);

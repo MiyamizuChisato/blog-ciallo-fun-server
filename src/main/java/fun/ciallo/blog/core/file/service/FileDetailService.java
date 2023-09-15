@@ -40,7 +40,7 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
     public FileInfo getByUrl(String url) {
         FileDetail detail = getOne(new LambdaQueryWrapper<FileDetail>().eq(FileDetail::getUrl, url));
         FileInfo info = BeanUtil.copyProperties(detail, FileInfo.class, "attr");
-        if (StrUtil.isNotBlank(detail.getAttr())) {
+        if (detail != null && StrUtil.isNotBlank(detail.getAttr())) {
             info.setAttr(objectMapper.readValue(detail.getAttr(), Dict.class));
         }
         return info;

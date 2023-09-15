@@ -59,6 +59,8 @@ public class OauthController {
         Oauth oauth = new Oauth();
         oauth.setSource(source);
         oauth.setUuid(authUser.getUuid());
+        oauth.setAccessToken(authUser.getToken().getAccessToken());
+        oauth.setRefreshToken(authUser.getToken().getRefreshToken());
         return oauth;
     }
 }
