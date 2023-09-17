@@ -34,9 +34,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public List<CategoryDto> getCategoryDtoList() {
         List<Category> categories = this.list();
-        if (categories.isEmpty()) {
-            return null;
-        }
         return categories.stream().map(category -> BeanUtil.copyProperties(category, CategoryDto.class)).toList();
     }
 

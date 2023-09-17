@@ -20,6 +20,7 @@ import javax.annotation.Resource;
         "fun.ciallo.blog.core.category.controller",
         "fun.ciallo.blog.core.oauth.controller",
         "fun.ciallo.blog.core.user.controller",
+        "fun.ciallo.blog.core.message.controller",
 })
 public class GlobalResultConfig implements ResponseBodyAdvice<Object> {
     @Resource

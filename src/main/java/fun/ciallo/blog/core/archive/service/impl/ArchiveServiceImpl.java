@@ -80,9 +80,6 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
     }
 
     private Page<ArchiveDto> buildArchiveDtoPage(Page<Archive> parmaPage) {
-        if (parmaPage.getRecords().isEmpty()) {
-            return null;
-        }
         Page<ArchiveDto> page = new Page<>();
         BeanUtil.copyProperties(parmaPage, page);
         List<ArchiveDto> archiveDtoList = parmaPage.getRecords().stream().map(this::formatArchive).toList();

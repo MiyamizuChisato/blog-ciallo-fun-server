@@ -47,7 +47,6 @@ public class ArchiveController {
         } else {
             page = archiveService.loadArchiveDtoByPage(parmaPage);
         }
-        AssertUtils.notNull(page, Status.NOT_FOUND);
         return page;
     }
 

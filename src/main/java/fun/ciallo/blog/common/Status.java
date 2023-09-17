@@ -1,5 +1,8 @@
 package fun.ciallo.blog.common;
 
+import lombok.Getter;
+
+@Getter
 public enum Status {
     SUCCESS(0, "响应成功"),
     FAILED(-1, "响应失败"),
@@ -24,19 +27,11 @@ public enum Status {
     private Integer code;
     private String message;
 
-    public Integer getCode() {
-        return code;
-    }
-
     public void setCode(Integer code) {
         this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
     }
-    }
+}

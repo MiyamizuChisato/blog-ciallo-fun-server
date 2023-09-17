@@ -61,9 +61,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     private Page<UserDto> buildUserDtoPage(Page<User> parmaPage) {
-        if (parmaPage.getRecords().isEmpty()) {
-            return null;
-        }
         Page<UserDto> page = new Page<>();
         BeanUtil.copyProperties(parmaPage, page);
         List<UserDto> userDtoList = parmaPage.getRecords().stream().map(user -> BeanUtil.copyProperties(user, UserDto.class)).toList();

@@ -17,7 +17,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
+@Valid
 @RestController
 @RequestMapping("/message")
 public class MessageController {
@@ -26,17 +28,10 @@ public class MessageController {
     @Resource
     private CacheUtils cacheUtils;
 
-    @GetMapping("/page/{current}")
+    @PostMapping("/page/{current}")
     public Page<MessageDto> getMessageByPage(@PathVariable long current, @RequestBody MessageQueryDto messageQueryDto) {
         Page<Message> parmaPage = new Page<>(current, 5);
-        Page<MessageDto> page;
-        if (messageQueryDto.isQuery()) {
-            page = messageService.queryMessageDtoByPage(parmaPage, messageQueryDto);
-        } else {
-            page = messageService.loadMessageDtoByPage(parmaPage);
-        }
-        AssertUtils.notNull(page, Status.NOT_FOUND);
-        return page;
+        return messageService.queryMessageDtoByPage(parmaPage, messageQueryDto);
     }
 
     @Token
