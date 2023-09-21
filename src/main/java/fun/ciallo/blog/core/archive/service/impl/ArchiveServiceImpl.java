@@ -42,6 +42,9 @@ public class ArchiveServiceImpl extends ServiceImpl<ArchiveMapper, Archive> impl
     @Override
     public ArchiveDto getArchiveDtoById(int id) {
         Archive archive = this.getById(id);
+        if (archive == null) {
+            return null;
+        }
         return this.formatArchive(archive);
     }
 
